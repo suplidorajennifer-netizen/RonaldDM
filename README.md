@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Página de Prueba - Ronald Dávila Moraga</title>
+    <title>Página de Prueba </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -129,7 +129,7 @@
     <!-- CONTENIDO -->
     <div id="contenido">
         <div class="contenedor">
-            <h1>Página de Prueba</h1>
+            <h1> Ronald Dávila Moraga</h1>
             <p>Hola, Estoy Poniendo <strong>Una Pagina Aprueba</strong>.</p>
             <p>
                 Esta es una página de prueba que estoy utilizando para poner a prueba
@@ -139,7 +139,7 @@
                 Si estás viendo esta página correctamente, el servidor está funcionando.
             </p>
             <footer>
-                © 2026 - Ronald Dávila CR
+                © 2026 -  Ronald Dávila Moraga CR
             </footer>
         </div>
     </div>
