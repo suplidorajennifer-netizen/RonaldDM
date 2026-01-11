@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Página de Prueba </title>
+    <title>Página de Prueba - Ronald Dávila</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -36,9 +36,7 @@
         }
 
         @keyframes girar {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         /* ===== CONTENIDO ===== */
@@ -59,63 +57,62 @@
 
         .contenedor {
             background-color: #ffffff;
-            padding: 35px;
+            padding: 30px;
             border-radius: 12px;
-            max-width: 600px;
+            max-width: 650px;
             text-align: center;
             box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            animation: aparecer 1.5s ease-out, flotar 4s ease-in-out infinite;
+            animation: aparecer 1.5s ease-out;
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 15px;
             animation: brillo 3s infinite;
         }
 
-        p {
-            color: #555;
+        /* ===== JUEGO ===== */
+        .juego {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 2px dashed #ddd;
+        }
+
+        .juego button {
+            padding: 15px 25px;
             font-size: 18px;
-            line-height: 1.6;
+            border: none;
+            border-radius: 8px;
+            background: #4facfe;
+            color: #fff;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .juego button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .contador {
+            font-size: 22px;
+            margin: 10px 0;
         }
 
         footer {
-            margin-top: 25px;
+            margin-top: 20px;
             font-size: 14px;
             color: #888;
         }
 
         /* ===== ANIMACIONES ===== */
         @keyframes aparecer {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes flotar {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes brillo {
-            0% {
-                text-shadow: 0 0 5px rgba(79,172,254,0.5);
-            }
-            50% {
-                text-shadow: 0 0 15px rgba(79,172,254,1);
-            }
-            100% {
-                text-shadow: 0 0 5px rgba(79,172,254,0.5);
-            }
+            0% { text-shadow: 0 0 5px rgba(79,172,254,0.5); }
+            50% { text-shadow: 0 0 15px rgba(79,172,254,1); }
+            100% { text-shadow: 0 0 5px rgba(79,172,254,0.5); }
         }
     </style>
 </head>
@@ -129,29 +126,71 @@
     <!-- CONTENIDO -->
     <div id="contenido">
         <div class="contenedor">
-            <h1> Ronald Dávila Moraga</h1>
-            <p>Hola, Estoy Poniendo <strong>Una Pagina Aprueba</strong>.</p>
-            <p>
-                Esta es una página de prueba que estoy utilizando para poner a prueba
-                mi servidor web.
-            </p>
-            <p>
-                Si estás viendo esta página correctamente, el servidor está funcionando.
-            </p>
+            <h1>Página de Prueba</h1>
+            <p>Hola, mi nombre es <strong>Ronald Dávila</strong>.</p>
+            <p>Esta página es una prueba para mi servidor web.</p>
+
+            <!-- JUEGO -->
+            <div class="juego">
+                <h2>🎮 Juego de Clics</h2>
+                <p>Tienes <strong>10 segundos</strong> para hacer clics</p>
+                <div class="contador">Clics: <span id="clics">0</span></div>
+                <div class="contador">Tiempo: <span id="tiempo">10</span>s</div>
+
+                <button id="btnIniciar">Iniciar juego</button>
+                <button id="btnClic" disabled>¡CLIC!</button>
+            </div>
+
             <footer>
-                © 2026 -  Ronald Dávila Moraga CR
+                © 2026 - Ronald Dávila
             </footer>
         </div>
     </div>
 
     <script>
+        // Loader
         window.addEventListener("load", () => {
             setTimeout(() => {
-                document.getElementById("loader").style.opacity = "0";
-                document.getElementById("loader").style.visibility = "hidden";
-                document.getElementById("contenido").classList.add("mostrar");
+                loader.style.opacity = "0";
+                loader.style.visibility = "hidden";
+                contenido.classList.add("mostrar");
                 document.body.style.overflow = "auto";
-            }, 1500); // tiempo del loader (ms)
+            }, 1500);
+        });
+
+        // Juego
+        let clics = 0;
+        let tiempo = 10;
+        let intervalo;
+
+        const btnIniciar = document.getElementById("btnIniciar");
+        const btnClic = document.getElementById("btnClic");
+        const spanClics = document.getElementById("clics");
+        const spanTiempo = document.getElementById("tiempo");
+
+        btnIniciar.addEventListener("click", () => {
+            clics = 0;
+            tiempo = 10;
+            spanClics.textContent = clics;
+            spanTiempo.textContent = tiempo;
+            btnClic.disabled = false;
+            btnIniciar.disabled = true;
+
+            intervalo = setInterval(() => {
+                tiempo--;
+                spanTiempo.textContent = tiempo;
+                if (tiempo === 0) {
+                    clearInterval(intervalo);
+                    btnClic.disabled = true;
+                    btnIniciar.disabled = false;
+                    alert("⏱️ Tiempo terminado\nTotal de clics: " + clics);
+                }
+            }, 1000);
+        });
+
+        btnClic.addEventListener("click", () => {
+            clics++;
+            spanClics.textContent = clics;
         });
     </script>
 
