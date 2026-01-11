@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Página de Prueba - Ronald Dávila</title>
+    <title>Página Arcade - Ronald Dávila</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -30,7 +30,7 @@
             width: 80px;
             height: 80px;
             border: 8px solid rgba(255,255,255,0.3);
-            border-top: 8px solid #ffffff;
+            border-top: 8px solid #fff;
             border-radius: 50%;
             animation: girar 1s linear infinite;
         }
@@ -56,45 +56,61 @@
         }
 
         .contenedor {
-            background-color: #ffffff;
+            background: #fff;
             padding: 30px;
             border-radius: 12px;
-            max-width: 650px;
+            max-width: 700px;
+            width: 95%;
             text-align: center;
             box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            animation: aparecer 1.5s ease-out;
         }
 
         h1 {
             animation: brillo 3s infinite;
         }
 
-        /* ===== JUEGO ===== */
+        /* ===== JUEGO ARCADE ===== */
         .juego {
-            margin-top: 30px;
-            padding: 20px;
-            border-top: 2px dashed #ddd;
+            margin-top: 25px;
         }
 
-        .juego button {
-            padding: 15px 25px;
+        .info {
             font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .area-juego {
+            position: relative;
+            background: #f4f4f4;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #ddd;
+        }
+
+        .objetivo {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #ff4d4d, #c70000);
+            border-radius: 50%;
+            cursor: pointer;
+            animation: aparecer 0.3s ease;
+        }
+
+        .botones button {
+            margin: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
             border: none;
             border-radius: 8px;
             background: #4facfe;
             color: #fff;
             cursor: pointer;
-            margin: 10px;
         }
 
-        .juego button:disabled {
+        .botones button:disabled {
             background: #aaa;
-            cursor: not-allowed;
-        }
-
-        .contador {
-            font-size: 22px;
-            margin: 10px 0;
         }
 
         footer {
@@ -105,8 +121,8 @@
 
         /* ===== ANIMACIONES ===== */
         @keyframes aparecer {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         @keyframes brillo {
@@ -126,19 +142,20 @@
     <!-- CONTENIDO -->
     <div id="contenido">
         <div class="contenedor">
-            <h1>Página de Prueba</h1>
-            <p>Hola, mi nombre es <strong>Ronald Dávila</strong>.</p>
-            <p>Esta página es una prueba para mi servidor web.</p>
+            <h1>Mini Juego Arcade</h1>
+            <p>Hola, soy <strong>Ronald Dávila</strong>. Página de prueba de mi servidor web.</p>
 
-            <!-- JUEGO -->
             <div class="juego">
-                <h2>🎮 Juego de Clics</h2>
-                <p>Tienes <strong>10 segundos</strong> para hacer clics</p>
-                <div class="contador">Clics: <span id="clics">0</span></div>
-                <div class="contador">Tiempo: <span id="tiempo">10</span>s</div>
+                <div class="info">
+                    🎯 Puntos: <span id="puntos">0</span> |
+                    ⏱️ Tiempo: <span id="tiempo">20</span>s
+                </div>
 
-                <button id="btnIniciar">Iniciar juego</button>
-                <button id="btnClic" disabled>¡CLIC!</button>
+                <div class="area-juego" id="areaJuego"></div>
+
+                <div class="botones">
+                    <button id="btnIniciar">Iniciar juego</button>
+                </div>
             </div>
 
             <footer>
@@ -158,39 +175,60 @@
             }, 1500);
         });
 
-        // Juego
-        let clics = 0;
-        let tiempo = 10;
-        let intervalo;
-
+        // Juego Arcade
+        const area = document.getElementById("areaJuego");
+        const puntosSpan = document.getElementById("puntos");
+        const tiempoSpan = document.getElementById("tiempo");
         const btnIniciar = document.getElementById("btnIniciar");
-        const btnClic = document.getElementById("btnClic");
-        const spanClics = document.getElementById("clics");
-        const spanTiempo = document.getElementById("tiempo");
+
+        let puntos = 0;
+        let tiempo = 20;
+        let intervaloTiempo;
+        let intervaloObjetivo;
+
+        function crearObjetivo() {
+            area.innerHTML = "";
+            const obj = document.createElement("div");
+            obj.classList.add("objetivo");
+
+            const x = Math.random() * (area.clientWidth - 50);
+            const y = Math.random() * (area.clientHeight - 50);
+
+            obj.style.left = x + "px";
+            obj.style.top = y + "px";
+
+            obj.addEventListener("click", () => {
+                puntos++;
+                puntosSpan.textContent = puntos;
+                crearObjetivo();
+            });
+
+            area.appendChild(obj);
+        }
 
         btnIniciar.addEventListener("click", () => {
-            clics = 0;
-            tiempo = 10;
-            spanClics.textContent = clics;
-            spanTiempo.textContent = tiempo;
-            btnClic.disabled = false;
+            puntos = 0;
+            tiempo = 20;
+            puntosSpan.textContent = puntos;
+            tiempoSpan.textContent = tiempo;
             btnIniciar.disabled = true;
 
-            intervalo = setInterval(() => {
+            crearObjetivo();
+
+            intervaloObjetivo = setInterval(crearObjetivo, 1000);
+
+            intervaloTiempo = setInterval(() => {
                 tiempo--;
-                spanTiempo.textContent = tiempo;
+                tiempoSpan.textContent = tiempo;
+
                 if (tiempo === 0) {
-                    clearInterval(intervalo);
-                    btnClic.disabled = true;
+                    clearInterval(intervaloTiempo);
+                    clearInterval(intervaloObjetivo);
+                    area.innerHTML = "";
                     btnIniciar.disabled = false;
-                    alert("⏱️ Tiempo terminado\nTotal de clics: " + clics);
+                    alert("🎮 Juego terminado\nPuntos obtenidos: " + puntos);
                 }
             }, 1000);
-        });
-
-        btnClic.addEventListener("click", () => {
-            clics++;
-            spanClics.textContent = clics;
         });
     </script>
 
